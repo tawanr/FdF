@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 12:32:14 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/06 19:37:16 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/06 20:00:19 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,12 @@ t_vertex	***interpolatemap(t_map *map, int w_width, int w_height, int pad)
 	t_vertex	*tmp;
 	t_maprow	*temprow;
 	t_vertex	***int_map;
+	int			i;
 
+	i = 0;
 	int_map = (t_vertex ***)malloc(map->width * sizeof(t_vertex **));
-	*int_map = (t_vertex **)malloc(map->height * sizeof(t_vertex *));
+	while (i < map->width)
+		int_map[i++] = (t_vertex **)malloc(map->height * sizeof(t_vertex *));
 	w_width = w_width - (2 * pad);
 	w_height = w_height - (2 * pad);
 	factor = w_width / map->width;
@@ -101,7 +104,7 @@ t_vertex	***interpolatemap(t_map *map, int w_width, int w_height, int pad)
 	while (temprow)
 	{
 		tmp = temprow->firstvtx;
-		while (tmp)
+		while (tmp != NULL)
 		{
 			int_map[tmp->x][tmp->y] = getvert(tmp->x, tmp->y, tmp->z, factor);
 			tmp = tmp->next;
