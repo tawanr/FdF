@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 12:32:14 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/06 20:00:19 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/06 20:03:58 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,11 @@ void	drawmap(t_vertex ***map, int width, int height, t_data *img)
 	{
 		while (j < height - 1)
 		{
+			printf("drawing [%i][%i] -> [%i][%i]\n", i, j, i, j + 1);
 			curline = newline(map[i][j], map[i][j + 1]);
+			putline(curline, img);
+			printf("drawing [%i][%i] -> [%i][%i]\n", i, j, i + 1, j);
+			curline = newline(map[i][j], map[i + 1][j]);
 			putline(curline, img);
 			j++;
 		}
