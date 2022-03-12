@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 13:32:08 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/06 19:36:54 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/11 15:48:22 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,15 @@
 # include <fcntl.h>
 # include "libft.h"
 # include "mlx.h"
+# define PI 3.141592654
 
 typedef struct s_vertex
 {
-	int				x;
-	int				y;
-	int				z;
+	double			x;
+	double			y;
+	double			z;
 	struct s_vertex	*next;
+	int				vertcolor;
 }	t_vertex;
 
 typedef struct s_line
@@ -64,8 +66,15 @@ typedef struct s_todraw
 	t_line		*linelst;
 }	t_todraw;
 
-void		my_mlx_pixel_put(t_data *data, int x, int y, int color);
-int			putline(t_line *line, t_data *img);
+typedef struct s_fdfvars
+{
+	t_todraw	drawmap;
+	t_vertex	***arr_map;
+	t_map		parsemap;
+}	t_fdfvars;
+
+void		pixel_put(t_data *data, int x, int y, int color);
+int			putline(t_line *line, t_data *img, int *padup, int *mapheight);
 int			ft_getmax(int num1, int num2);
 t_line		*newline(t_vertex *vertex1, t_vertex *vertex2);
 t_map		*parsemap(int fd);
@@ -75,6 +84,8 @@ int			appendrow(t_map *map, t_maprow *newrow);
 int			findmapwidth(t_map *map);
 void		drawmap(t_vertex ***map, int width, int height, t_data *img);
 t_vertex	***interpolatemap(t_map *map, int w_width, int w_height, int pad);
-t_vertex	*getvert(int x, int y, int z, double factor);
+t_vertex	*getvert(double x, double y, double z, double factor);
+void		rotatemap(t_map *map, double deg);
+int			getcolor(double cur_z, int *maph);
 
 #endif

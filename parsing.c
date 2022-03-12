@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 14:52:12 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/06 18:58:11 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/08 20:42:20 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_map	*parsemap(int fd)
 
 int	findmapwidth(t_map *map)
 {
-	int	width;
+	int			width;
 	t_vertex	*temp;
 
 	width = 0;
@@ -81,7 +81,6 @@ t_maprow	*getmaprow(int row, char **readrow)
 	{
 		temp = maprow->firstvtx;
 		elevation = ft_atoi(readrow[column]);
-		//printf("adding new vertex: [%i, %i, %i]\n", column, row, elevation);
 		if (!appvertex(maprow, column, row, elevation))
 			return (NULL);
 		column++;

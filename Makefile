@@ -13,7 +13,8 @@ NAME = test.out
 all: $(NAME)
 
 $(NAME): $(SRCS)
-	$(CC) $(SRCS) -Lmlx -lmlx -Llibft -lft -framework OpenGL -framework AppKit -o $(NAME) -Imlx -Ilibft
+	$(CC) $(SRCS) -Llibft -lft -Lminilibx-linux -lmlx -L/usr/lib -Iminilibx-linux -lXext -lX11 -lm -lz -o $(NAME) -Ilibft
+#$(CC) $(SRCS) -Lmlx -lmlx -Llibft -lft -framework OpenGL -framework AppKit -o $(NAME) -Imlx -Ilibft
 
 clean:
 	rm -rf *.o
