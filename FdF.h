@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 13:32:08 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/11 15:48:22 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/13 05:07:55 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include "libft.h"
 # include "mlx.h"
 # define PI 3.141592654
+# define WIDTH 1600
+# define HEIGHT 900
 
 typedef struct s_vertex
 {
@@ -28,7 +30,7 @@ typedef struct s_vertex
 	double			y;
 	double			z;
 	struct s_vertex	*next;
-	int				vertcolor;
+	int				color;
 }	t_vertex;
 
 typedef struct s_line
@@ -51,6 +53,7 @@ typedef struct s_data
 typedef struct s_maprow
 {
 	t_vertex		*firstvtx;
+	int				height;
 	struct s_maprow	*next;
 }	t_maprow;
 
@@ -70,22 +73,59 @@ typedef struct s_fdfvars
 {
 	t_todraw	drawmap;
 	t_vertex	***arr_map;
-	t_map		parsemap;
+	t_map		*parsemap;
+	double		zoomfactor;
+	int			z_angle;
+	int			w_width;
+	int			w_height;
+	double		m_width;
+	double		m_height;
+	int			shift_x;
+	int			shift_y;
+	double		ele_factor;
+	int			customcolor;
+	int			rotateangle;
+	void		*mlx;
+	void		*mlx_win;
+	t_data		*img;
+	int			mouse_pressed;
+	int			rmouse_pressed;
+	int			mouse_x;
+	int			mouse_y;
 }	t_fdfvars;
 
 void		pixel_put(t_data *data, int x, int y, int color);
-int			putline(t_line *line, t_data *img, int *padup, int *mapheight);
+void		putline(t_line *line, t_data *img, t_fdfvars *fdfvars, int *ele);
 int			ft_getmax(int num1, int num2);
 t_line		*newline(t_vertex *vertex1, t_vertex *vertex2);
 t_map		*parsemap(int fd);
 t_maprow	*getmaprow(int row, char **readrow);
-int			appvertex(t_maprow *maprow, int column, int row, int elevation);
+int			appvertex(t_maprow *maprow, int row, int elevation, int color);
+int			checkcolor(char *str);
 int			appendrow(t_map *map, t_maprow *newrow);
 int			findmapwidth(t_map *map);
-void		drawmap(t_vertex ***map, int width, int height, t_data *img);
-t_vertex	***interpolatemap(t_map *map, int w_width, int w_height, int pad);
-t_vertex	*getvert(double x, double y, double z, double factor);
-void		rotatemap(t_map *map, double deg);
+void		drawmap(t_fdfvars *fdfvars, t_data *img);
+t_vertex	***interpolatemap(t_map *map, t_fdfvars *fdfvars);
+t_vertex	*getvert(t_vertex *src, t_fdfvars *fdfvars);
+void		rotatemap(t_vertex ***int_map, t_map *map, double deg);
 int			getcolor(double cur_z, int *maph);
+void		init_vars(t_fdfvars *fdfvars);
+int			getlncolor(int i, int linelen, t_line *line);
+int			getcustcol(double cur_z, int *maph);
+void		getdrawdim(t_fdfvars *fdfvars, t_vertex ***int_map);
+double		getdrawheight(t_fdfvars *fdfvars, t_vertex ***int_map);
+void		initpadding(t_fdfvars *fdfvars);
+int			keymod(int keycode, t_fdfvars *fdfvars);
+void		init_mlx(t_fdfvars *fdfvars, void *mlx, void *mlx_win, t_data *img);
+int			drawframe(t_fdfvars *fdfvars);
+int			mousectl(int button, int x, int y, t_fdfvars *fdfvars);
+int			end_win(t_fdfvars *fdfvars);
+int			mouserot(int x, int y, t_fdfvars *fdfvars);
+int			mouserel(int button, int x, int y, t_fdfvars *fdfvars);
+void		inithooks(void *mlx_win, t_fdfvars *fdfvars);
+void		freearr(t_fdfvars *fdfvars);
+void		int_vertex(t_vertex *ver, t_vertex *tmp, double deg, double xy[2]);
+int			ft_ishex(char c);
+void		keycont(int keycode, t_fdfvars *fdfvars);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 14:52:12 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/08 20:42:20 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/13 05:12:51 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@ t_map	*parsemap(int fd)
 	while (curline)
 	{
 		appendrow(map, getmaprow(rows, ft_split(curline, ' ')));
+		free(curline);
 		curline = get_next_line(fd);
 		rows++;
 	}
+	free(curline);
 	map->height = rows;
 	map->width = findmapwidth(map);
 	return (map);
@@ -71,17 +73,20 @@ t_maprow	*getmaprow(int row, char **readrow)
 	t_maprow	*maprow;
 	int			column;
 	int			elevation;
+	int			color;
 	t_vertex	*temp;
 
 	maprow = (t_maprow *)malloc(sizeof(t_maprow));
 	maprow->firstvtx = NULL;
 	maprow->next = NULL;
+	maprow->height = row;
 	column = 0;
 	while (readrow[column])
 	{
 		temp = maprow->firstvtx;
 		elevation = ft_atoi(readrow[column]);
-		if (!appvertex(maprow, column, row, elevation))
+		color = checkcolor(readrow[column] + getdigit(elevation));
+		if (!appvertex(maprow, column, elevation, color))
 			return (NULL);
 		column++;
 	}
@@ -91,26 +96,31 @@ t_maprow	*getmaprow(int row, char **readrow)
 	return (maprow);
 }
 
-int	appvertex(t_maprow *maprow, int column, int row, int elevation)
+int	checkcolor(char *str)
 {
-	t_vertex	*newvertex;
-	t_vertex	*temp;
+	int	i;
+	int	colornum;
 
-	newvertex = (t_vertex *)malloc(sizeof(t_vertex));
-	if (!newvertex)
-		return (0);
-	newvertex->x = column;
-	newvertex->y = row;
-	newvertex->z = elevation;
-	newvertex->next = NULL;
-	temp = maprow->firstvtx;
-	if (temp == NULL)
-		maprow->firstvtx = newvertex;
-	else
+	colornum = 0;
+	if (!ft_strncmp(str, ",0x", 3))
+		str += 3;
+	while (ft_ishex(*str))
 	{
-		while (temp->next != NULL)
-			temp = temp->next;
-		temp->next = newvertex;
+		colornum = colornum << 8;
+		i = 0;
+		while (i < 2)
+		{
+			if (str[i] - '0' <= 9)
+				colornum += (str[i] - '0') * ((8 * !i) + !i);
+			else if (str[i] >= 'a' && str[i] <= 'f')
+				colornum += (10 + (str[i] - 'a')) * ((8 * !i) + !i);
+			else if (str[i] >= 'A' && str[i] <= 'F')
+				colornum += (10 + (str[i] - 'A')) * ((8 * !i) + !i);
+			i++;
+		}
+		str += 2;
 	}
-	return (1);
+	if (colornum == 0)
+		colornum = 0x00FFFFFFF;
+	return (colornum);
 }
