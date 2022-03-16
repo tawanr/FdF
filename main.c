@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 12:32:14 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/13 05:15:13 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/16 14:43:56 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(int argc, char **argv)
 	img.img = mlx_new_image(mlx, WIDTH, HEIGHT);
 	init_mlx(&fdfvars, mlx, mlx_win, &img);
 	init_vars(&fdfvars);
-	fdfvars.arr_map = interpolatemap(fdfvars.parsemap, &fdfvars);
+	fdfvars.arr_map = interpolatemap(&fdfvars);
 	initpadding(&fdfvars);
 	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.llen, &img.endian);
 	drawmap(&fdfvars, &img);
@@ -74,7 +74,7 @@ int	getlncolor(int i, int linelen, t_line *line)
 	unsigned int	c[2];
 	unsigned int	output;
 	int				j;
-	unsigned int	temp;
+	int				temp;
 
 	output = 0;
 	j = 0;

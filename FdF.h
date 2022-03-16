@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 13:32:08 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/13 05:07:55 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/16 14:44:26 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,9 @@ typedef struct s_fdfvars
 	int			rmouse_pressed;
 	int			mouse_x;
 	int			mouse_y;
+	int			def_shf_x;
+	int			def_shf_y;
+	int			def_zoom;
 }	t_fdfvars;
 
 void		pixel_put(t_data *data, int x, int y, int color);
@@ -105,7 +108,7 @@ int			checkcolor(char *str);
 int			appendrow(t_map *map, t_maprow *newrow);
 int			findmapwidth(t_map *map);
 void		drawmap(t_fdfvars *fdfvars, t_data *img);
-t_vertex	***interpolatemap(t_map *map, t_fdfvars *fdfvars);
+t_vertex	***interpolatemap(t_fdfvars *fdfvars);
 t_vertex	*getvert(t_vertex *src, t_fdfvars *fdfvars);
 void		rotatemap(t_vertex ***int_map, t_map *map, double deg);
 int			getcolor(double cur_z, int *maph);
@@ -123,9 +126,11 @@ int			end_win(t_fdfvars *fdfvars);
 int			mouserot(int x, int y, t_fdfvars *fdfvars);
 int			mouserel(int button, int x, int y, t_fdfvars *fdfvars);
 void		inithooks(void *mlx_win, t_fdfvars *fdfvars);
-void		freearr(t_fdfvars *fdfvars);
+void		freearr(t_fdfvars *fdfvars, int fullflag);
 void		int_vertex(t_vertex *ver, t_vertex *tmp, double deg, double xy[2]);
 int			ft_ishex(char c);
 void		keycont(int keycode, t_fdfvars *fdfvars);
+void		init_arr(t_fdfvars *fdfvars);
+void		clean_mlx(t_fdfvars *fdfvars);
 
 #endif

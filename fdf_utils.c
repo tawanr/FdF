@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 01:53:30 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/13 02:03:57 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/14 17:22:49 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,22 @@ int	ft_getmax(int num1, int num2)
 t_vertex	*getvert(t_vertex *src, t_fdfvars *fdfvars)
 {
 	double		z_factor;
+	double		y_factor;
 	double		factor;
 	double		ele;
+	double		max_z;
 
 	factor = fdfvars->zoomfactor;
 	ele = fdfvars->ele_factor;
 	z_factor = sin((fdfvars->z_angle * PI) / 180) / sin((45 * PI) / 180);
+	y_factor = sin((fdfvars->z_angle * PI) / 180) / sin((45 * PI) / 180);
+	max_z = sin(0.5 * PI) / sin((45 * PI) / 180);
 	src->x = round(src->x * factor);
-	src->y = round(((src->y) * (z_factor * factor)) - (src->z * factor * ele));
-	src->z = round(src->z * (z_factor * factor));
+	if (y_factor > 1)
+		y_factor = 1;
+	src->y = round((src->y) * (y_factor * factor));
+	src->y -= (src->z * factor * ele * ((max_z - z_factor) / max_z));
+	src->z = round(src->z * (factor + !z_factor));
 	src->next = NULL;
 	return (src);
 }

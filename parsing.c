@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 14:52:12 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/13 05:12:51 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/16 14:39:12 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,9 @@
 t_map	*parsemap(int fd)
 {
 	char	*curline;
-	int		offset;
 	int		rows;
 	t_map	*map;
 
-	offset = 0;
 	rows = 0;
 	map = (t_map *)malloc(sizeof(t_map));
 	map->maprow = NULL;
@@ -74,7 +72,6 @@ t_maprow	*getmaprow(int row, char **readrow)
 	int			column;
 	int			elevation;
 	int			color;
-	t_vertex	*temp;
 
 	maprow = (t_maprow *)malloc(sizeof(t_maprow));
 	maprow->firstvtx = NULL;
@@ -83,7 +80,6 @@ t_maprow	*getmaprow(int row, char **readrow)
 	column = 0;
 	while (readrow[column])
 	{
-		temp = maprow->firstvtx;
 		elevation = ft_atoi(readrow[column]);
 		color = checkcolor(readrow[column] + getdigit(elevation));
 		if (!appvertex(maprow, column, elevation, color))
@@ -111,11 +107,11 @@ int	checkcolor(char *str)
 		while (i < 2)
 		{
 			if (str[i] - '0' <= 9)
-				colornum += (str[i] - '0') * ((8 * !i) + !i);
+				colornum += (str[i] - '0') * ((16 * !i) + !i);
 			else if (str[i] >= 'a' && str[i] <= 'f')
-				colornum += (10 + (str[i] - 'a')) * ((8 * !i) + !i);
+				colornum += (10 + (str[i] - 'a')) * ((16 * !i) + !i);
 			else if (str[i] >= 'A' && str[i] <= 'F')
-				colornum += (10 + (str[i] - 'A')) * ((8 * !i) + !i);
+				colornum += (10 + (str[i] - 'A')) * ((16 * !i) + !i);
 			i++;
 		}
 		str += 2;

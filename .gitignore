@@ -50,3 +50,11 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+.vscode
+*_backup
+maps
+!(minilibx-linux)
+!(*.c)
+!(*.h)
+!(Makefile)
+test*

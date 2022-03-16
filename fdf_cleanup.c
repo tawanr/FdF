@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 01:59:31 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/13 02:03:20 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/16 11:44:21 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	end_win(t_fdfvars *fdfvars)
 	t_maprow	*tmprow;
 	t_vertex	*tmp;
 
-	freearr(fdfvars);
+	freearr(fdfvars, 1);
 	currow = fdfvars->parsemap->maprow;
 	while (currow)
 	{
@@ -32,15 +32,24 @@ int	end_win(t_fdfvars *fdfvars)
 		}
 		tmprow = currow;
 		currow = currow->next;
+		free(tmprow);
 	}
 	free(fdfvars->parsemap);
-	mlx_destroy_image(fdfvars->mlx, fdfvars->img->img);
-	mlx_clear_window(fdfvars->mlx, fdfvars->mlx_win);
-	mlx_destroy_window(fdfvars->mlx, fdfvars->mlx_win);
+	clean_mlx(fdfvars);
 	return (1);
 }
 
-void	freearr(t_fdfvars *fdfvars)
+void	clean_mlx(t_fdfvars *fdfvars)
+{
+	mlx_destroy_image(fdfvars->mlx, fdfvars->img->img);
+	mlx_clear_window(fdfvars->mlx, fdfvars->mlx_win);
+	mlx_destroy_window(fdfvars->mlx, fdfvars->mlx_win);
+	mlx_destroy_display(fdfvars->mlx);
+	free(fdfvars->mlx);
+	exit(1);
+}
+
+void	freearr(t_fdfvars *fdfvars, int fullflag)
 {
 	int	i;
 	int	j;
@@ -51,7 +60,12 @@ void	freearr(t_fdfvars *fdfvars)
 		j = 0;
 		while (j < fdfvars->parsemap->height)
 			free(fdfvars->arr_map[i][j++]);
-		free(fdfvars->arr_map[i++]);
+		if (fullflag == 1)
+		{
+			free(fdfvars->arr_map[i]);
+		}
+		i++;
 	}
-	free(fdfvars->arr_map);
+	if (fullflag == 1)
+		free(fdfvars->arr_map);
 }

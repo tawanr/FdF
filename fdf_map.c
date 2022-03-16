@@ -6,13 +6,13 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 01:56:09 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/13 04:57:22 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/16 14:44:42 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "FdF.h"
 
-t_vertex	***interpolatemap(t_map *map, t_fdfvars *fdfvars)
+t_vertex	***interpolatemap(t_fdfvars *fdfvars)
 {
 	t_vertex	***int_map;
 	int			i;
@@ -39,7 +39,6 @@ void	rotatemap(t_vertex ***intm, t_map *map, double deg)
 	double		xy[2];
 	t_maprow	*trow;
 	t_vertex	*tmp;
-	double		temp_x;
 	int			j;
 
 	deg = (deg * PI) / 180;
@@ -52,7 +51,6 @@ void	rotatemap(t_vertex ***intm, t_map *map, double deg)
 		j = 0;
 		while (j < map->width)
 		{
-			intm[j][trow->height] = (t_vertex *)malloc(sizeof(t_vertex));
 			int_vertex(intm[j][trow->height], tmp, deg, xy);
 			j++;
 			tmp = tmp->next;

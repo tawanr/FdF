@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 02:00:31 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/13 03:40:07 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/16 14:44:17 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,19 @@ void	pixel_put(t_data *data, int x, int y, int color)
 
 int	drawframe(t_fdfvars *fdfvars)
 {
-	t_data	img;
+	t_data	*i;
 	void	*mlx;
-	void	*mlx_win;
+	void	*o_img;
 
 	mlx = fdfvars->mlx;
-	mlx_win = fdfvars->mlx_win;
-	img.img = mlx_new_image(fdfvars->mlx, WIDTH, HEIGHT);
-	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.llen, &img.endian);
-	fdfvars->img = &img;
+	o_img = fdfvars->img->img;
+	i = fdfvars->img;
+	i->img = mlx_new_image(fdfvars->mlx, WIDTH, HEIGHT);
+	i->addr = mlx_get_data_addr(i->img, &i->bpp, &i->llen, &i->endian);
 	rotatemap(fdfvars->arr_map, fdfvars->parsemap, fdfvars->rotateangle);
-	fdfvars->arr_map = interpolatemap(fdfvars->parsemap, fdfvars);
+	fdfvars->arr_map = interpolatemap(fdfvars);
 	drawmap(fdfvars, fdfvars->img);
-	mlx_put_image_to_window(mlx, mlx_win, fdfvars->img->img, 0, 0);
+	mlx_put_image_to_window(mlx, fdfvars->mlx_win, fdfvars->img->img, 0, 0);
+	mlx_destroy_image(mlx, o_img);
 	return (1);
 }

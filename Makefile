@@ -1,25 +1,31 @@
 SRCS = main.c parsing.c fdf_cleanup.c fdf_draw.c fdf_init.c	\
 		fdf_input.c fdf_map.c fdf_utils.c parsing_utils.c
 
-OBJs = $(SRCS:.c=.o)
+OBJS = $(SRCS:.c=.o)
 
-CC = gcc
-FLAGS = -Wextra -Wall -Werror
+CC = gcc -Ilibft -Imlx
+CFLAGS = -Wextra -Wall -Werror -Ilibft -Iminilibx-linux -I/usr/include -O3
 
-NAME = test.out
+NAME = fdf
+INCLUDES = ./libft
 
-%.o: %.c
-	$(CC) $(FLAGS) -Imlx -c $< -o $@
+%o: %c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 all: $(NAME)
 
-$(NAME): $(SRCS)
-#$(CC) $(SRCS) -Llibft -lft -Lminilibx-linux -lmlx -L/usr/lib -Iminilibx-linux -lXext -lX11 -lm -lz -o $(NAME) -Ilibft
-	$(CC) $(SRCS) -Lmlx_macos -lmlx -Llibft -lft -framework OpenGL -framework AppKit -o $(NAME) -Imlx_macos -Ilibft
-#$(CC) $(SRCS) -Lminilibx-linux -lminilibx-linux -Llibft -lft -framework OpenGL -framework AppKit -o $(NAME) -Iminilibs-linux -Ilibft
+$(NAME): $(OBJS)
+	$(MAKE) -C ./libft
+	$(MAKE) -C ./minilibx-linux
+	$(CC) $(OBJS) -lm -Llibft -lft -Lminilibx-linux -lmlx -L/usr/lib -Iminilibx-linux -lXext -lX11 -lm -lz -o $(NAME) -Ilibft
 
 clean:
+	$(MAKE) clean -C ./libft
+	$(MAKE) clean -C ./minilibx-linux
 	rm -rf *.o
 
-fclean:
+fclean: clean
+	$(MAKE) fclean -C ./libft
 	rm -rf $(NAME)
+
+re: fclean all
